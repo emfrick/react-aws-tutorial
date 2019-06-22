@@ -3,10 +3,10 @@ import { observer } from 'mobx-react'
 
 import { withStore } from '../../store'
 
-const SignupPage = () => (
+const SignupPage = (props) => (
     <div>
         <h1>Sign Up</h1>
-        <SignupForm />
+        <SignupForm {...props} />
     </div>
 )
 
@@ -14,6 +14,8 @@ const SignupPage = () => (
 class SignupForm extends Component {
     constructor(props) {
         super(props)
+
+        console.log("SignupForm constructor", this.props)
 
         this.onSubmit = this.onSubmit.bind(this)
         this.onChange = this.onChange.bind(this)
