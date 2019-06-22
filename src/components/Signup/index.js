@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
+import { Auth } from 'aws-amplify';
+import { withRouter } from 'react-router-dom'
 
 import { withStore } from '../../store'
 
@@ -27,6 +29,20 @@ class SignupForm extends Component {
         evt.preventDefault();
 
         console.log("Signing up with ", email, password)
+
+        Auth.signUp({
+            username: email,
+            password: password,
+        })
+        .then(data => console.log(data))
+        .then(() => {
+            return Auth.signIn({
+                username: email,
+                password: password
+            })
+        })
+        .then(this.props.history.push('/'))
+        .catch(err => console.log(err));
     }
 
     onChange(evt) {
@@ -50,4 +66,4 @@ class SignupForm extends Component {
     }
 }
 
-export default withStore(SignupPage)
+export default withRouter(withStore(SignupPage))
