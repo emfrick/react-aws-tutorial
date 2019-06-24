@@ -1,16 +1,35 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Auth } from 'aws-amplify'
+import { observer } from 'mobx-react'
+
+import { withStore } from '../../store'
 
 import LandingPage from '../Landing'
 import SignupPage from '../Signup';
 
-const App = () => (
-    <Router>
-        <div>
-            <Route exact path='/' component={ LandingPage } />
-            <Route  path='/signup' component={ SignupPage } />
-        </div>
-    </Router>
-)
+@observer
+class App extends Component {
+    constructor(props) {
+        super(props)
+    }
 
-export default App
+    componentDidMount() {
+        Auth.currentAuthenticatedUser({ bypassCache: true })
+            .then((user) => console.log(user))
+            .catch(err => console.log(err));
+    }
+
+    render() {
+        return (
+            <Router>
+                <div>
+                    <Route exact path='/' component={ LandingPage } />
+                    <Route  path='/signup' component={ SignupPage } />
+                </div>
+            </Router>
+        )
+    }
+}
+
+export default withStore(App)

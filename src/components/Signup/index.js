@@ -1,47 +1,39 @@
 import React, { Component } from 'react'
+import { Auth } from 'aws-amplify'
 import { observer } from 'mobx-react'
-import { Auth } from 'aws-amplify';
 import { withRouter } from 'react-router-dom'
 
 import { withStore } from '../../store'
 
-const SignupPage = (props) => (
+const SignupPage = observer((props) => (
     <div>
         <h1>Sign Up</h1>
-        <SignupForm {...props} />
+        { props.store.signup.verificationStep ? <VerificationForm {...props} /> : <SignupForm {...props} /> }
     </div>
-)
+))
 
 @observer
 class SignupForm extends Component {
     constructor(props) {
         super(props)
 
-        console.log("SignupForm constructor", this.props)
-
         this.onSubmit = this.onSubmit.bind(this)
         this.onChange = this.onChange.bind(this)
     }
 
     onSubmit(evt) {
-        const { email, password } = this.props.store.signup
+        const { email, password, verificationStep } = this.props.store.signup
 
         evt.preventDefault();
-
-        console.log("Signing up with ", email, password)
 
         Auth.signUp({
             username: email,
             password: password,
+            attributes: {
+                email: email,
+            }
         })
-        .then(data => console.log(data))
-        .then(() => {
-            return Auth.signIn({
-                username: email,
-                password: password
-            })
-        })
-        .then(this.props.history.push('/'))
+        .then(() => verificationStep = true)
         .catch(err => console.log(err));
     }
 
@@ -61,6 +53,43 @@ class SignupForm extends Component {
                 <input name="passwordConfirmation" value={passwordConfirmation} onChange={this.onChange} type="password" placeholder="Confirm Password" />
 
                 <button type="submit" disabled={isInvalid}>Sign Up</button>
+            </form>
+        )
+    }
+}
+
+@observer
+class VerificationForm extends Component {
+    constructor(props) {
+        super(props)
+
+        this.onSubmit = this.onSubmit.bind(this)
+        this.onChange = this.onChange.bind(this)
+    }
+
+    onSubmit(evt) {
+        const { email, password, verificationCode } = this.props.store.signup
+
+        evt.preventDefault()
+
+        Auth.confirmSignUp(email, verificationCode)
+            .then(() => Auth.signIn(email, password))
+            .then(() => this.props.store.resetSignup())
+            .catch(err => console.log(err))
+    }
+
+    onChange(evt) {
+        this.props.store.signup[evt.target.name] = evt.target.value
+    }
+
+    render() {
+        const { verificationCode } = this.props.store.signup
+        const isInvalid = verificationCode === ''
+
+        return (
+            <form onSubmit={this.onSubmit}>
+                <input name="verificationCode" value={verificationCode} onChange={this.onChange} type="text" placeholder="Verification Code" />
+                <button type="submit" disabled={isInvalid}>Verify</button>
             </form>
         )
     }

@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { observable } from 'mobx';
+import { observable, action } from 'mobx'
 import Amplify from 'aws-amplify'
 
 import App from './components/App'
-import StoreContext from './store';
+import StoreContext from './store'
 
 Amplify.configure({
     Auth: {
@@ -15,17 +15,27 @@ Amplify.configure({
     }
 })
 
-const appState = observable({
-    tagLine: 'Hello AWS',
-    signup: {
+class AppState {
+    @observable tagLine ='Hello from MobX'
+    @observable user = null
+    @observable signup = {
         email: '',
         password: '',
-        passwordConfirmation: ''
+        passwordConfirmation: '',
+        verificationCode: '',
+        verificationStep: ''
     }
-})
+
+    @action resetSignup = () => {
+        Object.keys(this.signup).forEach((val) => {
+            this.signup[val] = ''
+        })
+    }
+
+}
 
 ReactDOM.render(
-    <StoreContext.Provider value={appState}>
+    <StoreContext.Provider value={new AppState()}>
         <App />
     </StoreContext.Provider>,
     document.getElementById('app')
