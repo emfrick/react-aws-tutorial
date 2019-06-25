@@ -19,6 +19,9 @@ class AppState {
     @observable appLoading = false
     @observable tagLine ='Hello from MobX'
     @observable user = null
+    @observable verificationRequired = false
+    @observable verificationCode = ''
+
     @observable signup = {
         email: '',
         password: '',

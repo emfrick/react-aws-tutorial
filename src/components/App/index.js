@@ -12,6 +12,7 @@ import LandingPage from '../Landing'
 import SignupPage from '../Signup'
 import SigninPage from '../Signin'
 import HomePage from '../Home'
+import ForgotPasswordPage from '../PasswordForgot'
 
 const Loading = (props) => (
     <div>Loading...</div>
@@ -27,7 +28,7 @@ const AppBase = (props) => (
             <Route exact path={ ROUTES.LANDING }         component={ LandingPage } />
             <Route       path={ ROUTES.SIGN_UP }         component={ SignupPage } />
             <Route       path={ ROUTES.SIGN_IN }         component={ SigninPage } />
-            {/* <Route       path={ ROUTES.FORGOT_PASSWORD } component={ ForgotPasswordPage } /> */}
+            <Route       path={ ROUTES.FORGOT_PASSWORD } component={ ForgotPasswordPage } />
             <Route       path={ ROUTES.HOME }            component={ HomePage } />
             {/* <Route       path={ ROUTES.ACCOUNT }         component={ AccountPage } /> */}
             {/* <Route       path={ ROUTES.ADMIN }           component={ AdminPage } /> */}

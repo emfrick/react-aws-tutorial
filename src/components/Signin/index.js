@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import { Auth } from 'aws-amplify'
 
 import { SignupLink } from '../SignUp'
-// import { PasswordForgotLink } from '../PasswordForget'
+import { PasswordForgotLink } from '../PasswordForgot'
 import { withStore } from '../../store'
 import * as ROUTES from '../../constants/routes'
 
@@ -13,7 +13,7 @@ const SigninPage = () => (
     <div>
         <h1>Sign In</h1>
         <SigninForm />
-        {/* <PasswordForgotLink /> */}
+        <PasswordForgotLink />
         <SignupLink />
     </div>
 )
