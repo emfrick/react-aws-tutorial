@@ -5,6 +5,9 @@ import { observer } from 'mobx-react'
 
 import { withStore } from '../../store'
 
+import * as ROUTES from '../../constants/routes'
+import Navigation from '../Navigation'
+
 import LandingPage from '../Landing'
 import SignupPage from '../Signup'
 import SigninPage from '../Signin'
@@ -12,17 +15,6 @@ import HomePage from '../Home'
 
 const Loading = (props) => (
     <div>Loading...</div>
-)
-
-const Navigation = (props) => (
-    <Router>
-        <div>
-            <Route path='/'         component={ LandingPage } exact />
-            <Route path='/signup'   component={ SignupPage } />
-            <Route path='/signin'   component={ SigninPage } />
-            <Route path='/home'     component={ HomePage } />
-        </div>
-    </Router>
 )
 
 @observer
@@ -45,12 +37,22 @@ class App extends Component {
     }
 
     render() {
-        const { appLoading } = this.props.store
-
-        const comp = appLoading ? <Loading /> : <Navigation />
-
         return (
-            comp
+            <Router>
+                <div>
+                    <Navigation />
+
+                    <hr />
+
+                    <Route exact path={ ROUTES.LANDING }         component={ LandingPage } />
+                    <Route       path={ ROUTES.SIGN_UP }         component={ SignupPage } />
+                    <Route       path={ ROUTES.SIGN_IN }         component={ SigninPage } />
+                    {/* <Route       path={ ROUTES.FORGOT_PASSWORD } component={ ForgotPasswordPage } /> */}
+                    <Route       path={ ROUTES.HOME }            component={ HomePage } />
+                    {/* <Route       path={ ROUTES.ACCOUNT }         component={ AccountPage } /> */}
+                    {/* <Route       path={ ROUTES.ADMIN }           component={ AdminPage } /> */}
+                </div>
+            </Router>
         )
     }
 }

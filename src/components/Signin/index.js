@@ -33,7 +33,9 @@ class SigninFormBase extends Component {
         evt.preventDefault()
 
         Auth.signIn(email, password)
-            .then(() => {
+            .then(() => Auth.currentAuthenticatedUser())
+            .then((user) => {
+                this.props.store.user = user
                 this.props.history.push(ROUTES.HOME)
             })
             .catch(error => {

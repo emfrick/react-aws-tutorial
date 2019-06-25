@@ -78,7 +78,12 @@ class VerificationForm extends Component {
 
         Auth.confirmSignUp(email, verificationCode)
             .then(() => Auth.signIn(email, password))
-            .then(() => this.props.store.reset(this.props.store.signup))
+            .then(() => Auth.currentAuthenticatedUser())
+            .then((user) => {
+                this.props.store.user = user
+                this.props.store.reset(this.props.store.signup)
+                this.props.history.push(ROUTES.HOME)
+            })
             .catch(err => console.log(err))
     }
 
