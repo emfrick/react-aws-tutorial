@@ -36,6 +36,7 @@ class SigninFormBase extends Component {
             .then(() => Auth.currentAuthenticatedUser())
             .then((user) => {
                 this.props.store.user = user
+                this.props.store.reset(this.props.store.signin)
                 this.props.history.push(ROUTES.HOME)
             })
             .catch(error => {
