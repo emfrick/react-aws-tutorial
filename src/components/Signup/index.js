@@ -26,7 +26,7 @@ class SignupFormBase extends Component {
     }
 
     onSubmit(evt) {
-        const { email, password, verificationStep } = this.props.store.signup
+        const { email, password } = this.props.store.signup
 
         evt.preventDefault();
 
@@ -37,7 +37,7 @@ class SignupFormBase extends Component {
                 email: email,
             }
         })
-        .then(() => verificationStep = true)
+        .then(() => this.props.store.signup.verificationStep = true)
         .catch(err => console.log(err));
     }
 

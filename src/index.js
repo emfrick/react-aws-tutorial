@@ -24,7 +24,7 @@ class AppState {
         password: '',
         passwordConfirmation: '',
         verificationCode: '',
-        verificationStep: ''
+        verificationStep: false
     }
 
     @observable error = ''
