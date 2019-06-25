@@ -17,6 +17,24 @@ const Loading = (props) => (
     <div>Loading...</div>
 )
 
+const AppBase = (props) => (
+    <Router>
+        <div>
+            <Navigation />
+
+            <hr />
+
+            <Route exact path={ ROUTES.LANDING }         component={ LandingPage } />
+            <Route       path={ ROUTES.SIGN_UP }         component={ SignupPage } />
+            <Route       path={ ROUTES.SIGN_IN }         component={ SigninPage } />
+            {/* <Route       path={ ROUTES.FORGOT_PASSWORD } component={ ForgotPasswordPage } /> */}
+            <Route       path={ ROUTES.HOME }            component={ HomePage } />
+            {/* <Route       path={ ROUTES.ACCOUNT }         component={ AccountPage } /> */}
+            {/* <Route       path={ ROUTES.ADMIN }           component={ AdminPage } /> */}
+        </div>
+    </Router>
+)
+
 @observer
 class App extends Component {
     constructor(props) {
@@ -31,29 +49,19 @@ class App extends Component {
         this.props.store.appLoading = true
 
         Auth.currentAuthenticatedUser({ bypassCache: true })
-            .then((user) => console.log("User", user))
+            .then((user) => {
+                this.props.store.user = user
+                console.log("User", user)
+            })
             .catch((err) => console.log("Error", err))
             .finally(() => this.props.store.appLoading = false)
     }
 
     render() {
-        return (
-            <Router>
-                <div>
-                    <Navigation />
 
-                    <hr />
-
-                    <Route exact path={ ROUTES.LANDING }         component={ LandingPage } />
-                    <Route       path={ ROUTES.SIGN_UP }         component={ SignupPage } />
-                    <Route       path={ ROUTES.SIGN_IN }         component={ SigninPage } />
-                    {/* <Route       path={ ROUTES.FORGOT_PASSWORD } component={ ForgotPasswordPage } /> */}
-                    <Route       path={ ROUTES.HOME }            component={ HomePage } />
-                    {/* <Route       path={ ROUTES.ACCOUNT }         component={ AccountPage } /> */}
-                    {/* <Route       path={ ROUTES.ADMIN }           component={ AdminPage } /> */}
-                </div>
-            </Router>
-        )
+        const isLoading = this.props.store.appLoading
+        
+         return isLoading ? <Loading /> : <AppBase />
     }
 }
 

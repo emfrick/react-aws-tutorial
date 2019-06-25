@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
+import { observer } from 'mobx-react'
+import { compose } from 'recompose'
 
 import * as ROUTES from '../../constants/routes'
+import { withStore } from '../../store'
 
+@observer
 class SignoutButton extends Component {
     constructor(props) {
         super(props)
@@ -13,7 +17,10 @@ class SignoutButton extends Component {
 
     onSignout() {
         Auth.signOut()
-            .then(() => this.props.history.push(ROUTES.LANDING))
+            .then(() => {
+                this.props.store.user = null
+                this.props.history.push(ROUTES.LANDING)
+            })
             .catch((err) => console.log(err))
     }
 
@@ -24,4 +31,7 @@ class SignoutButton extends Component {
     }
 }
 
-export default withRouter(SignoutButton)
+export default compose(
+    withRouter,
+    withStore,
+)(SignoutButton)
