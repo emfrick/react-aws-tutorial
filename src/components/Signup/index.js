@@ -74,7 +74,7 @@ class VerificationForm extends Component {
 
         Auth.confirmSignUp(email, verificationCode)
             .then(() => Auth.signIn(email, password))
-            .then(() => this.props.store.resetSignup())
+            .then(() => this.props.store.reset(this.props.store.signup))
             .catch(err => console.log(err))
     }
 

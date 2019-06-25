@@ -7,6 +7,7 @@ import { withStore } from '../../store'
 
 import LandingPage from '../Landing'
 import SignupPage from '../Signup'
+import SigninPage from '../Signin'
 import HomePage from '../Home'
 
 const Loading = (props) => (
@@ -18,6 +19,7 @@ const Navigation = (props) => (
         <div>
             <Route path='/'         component={ LandingPage } exact />
             <Route path='/signup'   component={ SignupPage } />
+            <Route path='/signin'   component={ SigninPage } />
             <Route path='/home'     component={ HomePage } />
         </div>
     </Router>
@@ -38,8 +40,8 @@ class App extends Component {
 
         Auth.currentAuthenticatedUser({ bypassCache: true })
             .then((user) => console.log("User", user))
-            .then(() => this.props.store.appLoading = false)
             .catch((err) => console.log("Error", err))
+            .finally(() => this.props.store.appLoading = false)
     }
 
     render() {

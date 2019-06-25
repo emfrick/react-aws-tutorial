@@ -27,9 +27,16 @@ class AppState {
         verificationStep: ''
     }
 
-    @action resetSignup = () => {
-        Object.keys(this.signup).forEach((val) => {
-            this.signup[val] = ''
+    @observable error = ''
+
+    @observable signin = {
+        email: '',
+        password: ''
+    }
+
+    @action reset = (obj) => {
+        Object.keys(obj).forEach((val) => {
+            obj[val] = ''
         })
     }
 
