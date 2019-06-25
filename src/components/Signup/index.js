@@ -1,19 +1,23 @@
 import React, { Component } from 'react'
+import { Link, withRouter } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
 import { observer } from 'mobx-react'
-import { withRouter } from 'react-router-dom'
+import { compose } from 'recompose'
 
+import * as ROUTES from '../../constants/routes'
 import { withStore } from '../../store'
+import { SigninLink } from '../Signin';
 
 const SignupPage = observer((props) => (
     <div>
         <h1>Sign Up</h1>
         { props.store.signup.verificationStep ? <VerificationForm {...props} /> : <SignupForm {...props} /> }
+        <SigninLink />
     </div>
 ))
 
 @observer
-class SignupForm extends Component {
+class SignupFormBase extends Component {
     constructor(props) {
         super(props)
 
@@ -95,4 +99,16 @@ class VerificationForm extends Component {
     }
 }
 
-export default withRouter(withStore(SignupPage))
+const SignupLink = () => (
+    <p>
+        Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+    </p>
+)
+
+const SignupForm = compose(
+    withRouter,
+)(SignupFormBase)
+
+export default withStore(SignupPage)
+
+export { SignupForm, SignupLink }

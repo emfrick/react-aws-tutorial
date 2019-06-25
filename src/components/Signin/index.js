@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { compose } from 'recompose'
 import { observer } from 'mobx-react'
 import { Auth } from 'aws-amplify'
 
-// import { SignupLink } from '../SignUp'
+import { SignupLink } from '../SignUp'
 // import { PasswordForgotLink } from '../PasswordForget'
 import { withStore } from '../../store'
 import * as ROUTES from '../../constants/routes'
 
-const SignInPage = () => (
+const SigninPage = () => (
     <div>
         <h1>Sign In</h1>
         <SigninForm />
         {/* <PasswordForgotLink /> */}
-        {/* <SignupLink /> */}
+        <SignupLink />
     </div>
 )
 
@@ -63,11 +63,17 @@ class SigninFormBase extends Component {
     }
 }
 
+const SigninLink = () => (
+    <p>
+        Already have an account? <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+    </p>
+)
+
 const SigninForm = compose(
     withRouter,
     withStore,
 )(SigninFormBase)
 
-export default SignInPage
+export default SigninPage
 
-export { SigninForm }
+export { SigninForm, SigninLink }

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 
 import { withStore } from '../../store'
+import SignoutButton from '../Signout'
 
 @observer
 class HomePage extends Component {
@@ -21,6 +22,7 @@ class HomePage extends Component {
             <div>
                 <h1>Home Page</h1>
                 <p>Only available to signed in users.</p>
+                <SignoutButton />
             </div>
         )
     }
