@@ -6,6 +6,7 @@ import { observer } from 'mobx-react'
 import { withStore } from '../../store'
 
 import * as ROUTES from '../../constants/routes'
+import { ProtectedRoute } from '../Routes'
 import Navigation from '../Navigation'
 
 import LandingPage from '../Landing'
@@ -29,7 +30,7 @@ const AppBase = (props) => (
             <Route       path={ ROUTES.SIGN_UP }         component={ SignupPage } />
             <Route       path={ ROUTES.SIGN_IN }         component={ SigninPage } />
             <Route       path={ ROUTES.FORGOT_PASSWORD } component={ ForgotPasswordPage } />
-            <Route       path={ ROUTES.HOME }            component={ HomePage } />
+            <ProtectedRoute       path={ ROUTES.HOME }            component={ HomePage } />
             {/* <Route       path={ ROUTES.ACCOUNT }         component={ AccountPage } /> */}
             {/* <Route       path={ ROUTES.ADMIN }           component={ AdminPage } /> */}
         </div>
