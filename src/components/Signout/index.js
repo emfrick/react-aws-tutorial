@@ -15,13 +15,16 @@ class SignoutButton extends Component {
         this.onSignout = this.onSignout.bind(this)
     }
 
-    onSignout() {
-        Auth.signOut()
-            .then(() => {
-                this.props.store.user = null
-                this.props.history.push(ROUTES.LANDING)
-            })
-            .catch((err) => console.log(err))
+    async onSignout() {
+        try {
+            await Auth.signOut()
+
+            this.props.store.user = null
+            this.props.history.push(ROUTES.LANDING)
+        }
+        catch (err) {
+            console.log(err)
+        }
     }
 
     render() {

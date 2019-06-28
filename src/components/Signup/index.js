@@ -25,20 +25,25 @@ class SignupFormBase extends Component {
         this.onChange = this.onChange.bind(this)
     }
 
-    onSubmit(evt) {
+    async onSubmit(evt) {
         const { email, password } = this.props.store.signup
 
         evt.preventDefault();
 
-        Auth.signUp({
-            username: email,
-            password: password,
-            attributes: {
-                email: email,
-            }
-        })
-        .then(() => this.props.store.signup.verificationStep = true)
-        .catch(err => console.log(err));
+        try {
+            await Auth.signUp({
+                username: email,
+                password: password,
+                attributes: {
+                    email: email,
+                }
+            })
+            
+            this.props.store.signup.verificationStep = true
+        }
+        catch (err) {
+            console.log(err)
+        }
     }
 
     onChange(evt) {
@@ -71,20 +76,23 @@ class VerificationForm extends Component {
         this.onChange = this.onChange.bind(this)
     }
 
-    onSubmit(evt) {
+    async onSubmit(evt) {
         const { email, password, verificationCode } = this.props.store.signup
 
         evt.preventDefault()
 
-        Auth.confirmSignUp(email, verificationCode)
-            .then(() => Auth.signIn(email, password))
-            .then(() => Auth.currentAuthenticatedUser())
-            .then((user) => {
-                this.props.store.user = user
-                this.props.store.reset(this.props.store.signup)
-                this.props.history.push(ROUTES.HOME)
-            })
-            .catch(err => console.log(err))
+        try {
+            await Auth.confirmSignUp(email, verificationCode)
+            await Auth.signIn(email, password)
+            const user = await Auth.currentAuthenticatedUser()
+
+            this.props.store.user = user
+            this.props.store.reset(this.props.store.signup)
+            this.props.history.push(ROUTES.HOME)
+        }
+        catch (err) {
+            console.log(err)
+        }
     }
 
     onChange(evt) {

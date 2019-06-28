@@ -25,30 +25,33 @@ class PasswordForgotFormBase extends Component {
         this.onChangeCode = this.onChangeCode.bind(this)
     }
 
-    onSubmit(evt) {
+    async onSubmit(evt) {
         const { signin, verificationRequired, verificationCode, error } = this.props.store
         
         evt.preventDefault()
 
         if (!verificationRequired) {
-            Auth.forgotPassword(signin.email)
-                .then(() => this.props.store.verificationRequired = true)
-                .catch(err => {
-                    console.log(err)
-                    error = err
-                })
+            try {
+                let response = await Auth.forgotPassword(signin.email)
+                this.props.store.verificationRequired = true
+            }
+            catch (err) {
+                console.log("Error", err)
+                error = err
+            }
         }
         else {
-            Auth.forgotPasswordSubmit(signin.email, verificationCode, signin.password)
-                .then(() => {
-                    this.props.store.reset(this.props.store.signin)
-                    this.props.store.verificationCode = ''
-                })
-                .then(() => this.props.history.push(ROUTES.SIGN_IN))
-                .catch((err) => {
-                    console.log(err)
-                    error = err
-                })
+            try {
+                await Auth.forgotPasswordSubmit(signin.email, verificationCode, signin.password)
+
+                this.props.store.reset(this.props.store.signin)
+                this.props.store.verificationCode = ''
+                this.props.history.push(ROUTES.SIGN_IN)
+            }
+            catch (err) {
+                console.log("Error", err)
+                error = err
+            }
         }
     }
 

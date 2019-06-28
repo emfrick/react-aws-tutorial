@@ -27,21 +27,22 @@ class SigninFormBase extends Component {
         this.onChange = this.onChange.bind(this)
     }
 
-    onSubmit(evt) {
+    async onSubmit(evt) {
         const { email, password } = this.props.store.signin
 
         evt.preventDefault()
 
-        Auth.signIn(email, password)
-            .then(() => Auth.currentAuthenticatedUser())
-            .then((user) => {
-                this.props.store.user = user
-                this.props.store.reset(this.props.store.signin)
-                this.props.history.push(ROUTES.HOME)
-            })
-            .catch(error => {
-                this.props.store.error = error
-            })
+        try {
+            await Auth.signIn(email, password)
+            const user = await Auth.currentAuthenticatedUser()
+
+            this.props.store.user = user
+            this.props.store.reset(this.props.store.signin)
+            this.props.history.push(ROUTES.HOME)
+        }
+        catch (err) {
+            this.props.store.error = err
+        }
     }
 
     onChange(evt) {
