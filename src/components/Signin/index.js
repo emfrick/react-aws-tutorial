@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { compose } from 'recompose'
 import { observer } from 'mobx-react'
 import { Auth } from 'aws-amplify'
+import { Form, Input, Button } from 'semantic-ui-react'
 
 import { SignupLink } from '../SignUp'
 import { PasswordForgotLink } from '../PasswordForgot'
@@ -55,14 +56,20 @@ class SigninFormBase extends Component {
         const isInvalid = password === '' || email === ''
 
         return (
-            <form onSubmit={this.onSubmit}>
-                <input name="email" value={email} onChange={this.onChange} type="text" placeholder="Email Address" />
-                <input name="password" value={password} onChange={this.onChange} type="password" placeholder="Password" />
+            <Form onSubmit={this.onSubmit}>
+                <Form.Field>
+                    <label>Email</label>
+                    <Input name="email" value={email} onChange={this.onChange} type="text" placeholder="Email Address" />
+                </Form.Field>
+                <Form.Field>
+                    <label>Password</label>
+                    <Input name="password" value={password} onChange={this.onChange} type="password" placeholder="Password" />
+                </Form.Field>
 
-                <button disabled={isInvalid} type="submit">Sign In</button>
+                <Button primary disabled={isInvalid} type="submit">Sign In</Button>
 
                 { error && <p>{error.message}</p> }
-            </form>
+            </Form>
         )
     }
 }

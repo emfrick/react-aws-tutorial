@@ -6,6 +6,8 @@ import Amplify from 'aws-amplify'
 import App from './components/App'
 import StoreContext from './store'
 
+import 'semantic-ui-css/semantic.min.css'
+
 Amplify.configure({
     Auth: {
         identityPoolId: 'us-east-1:c0021ddf-e39c-41a7-b03e-bc4151428fd5',
