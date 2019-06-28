@@ -6,7 +6,8 @@ import { observer } from 'mobx-react'
 import { withStore } from '../../store'
 
 import * as ROUTES from '../../constants/routes'
-import { ProtectedRoute } from '../Routes'
+import * as ROLES from '../../constants/roles'
+import { AuthenticatedRoute, AuthorizedRoute } from '../Routes'
 import Navigation from '../Navigation'
 
 import LandingPage from '../Landing'
@@ -14,6 +15,7 @@ import SignupPage from '../Signup'
 import SigninPage from '../Signin'
 import HomePage from '../Home'
 import ForgotPasswordPage from '../PasswordForgot'
+import AdminPage from '../Admin'
 
 const Loading = (props) => (
     <div>Loading...</div>
@@ -26,13 +28,12 @@ const AppBase = (props) => (
 
             <hr />
 
-            <Route exact path={ ROUTES.LANDING }         component={ LandingPage } />
-            <Route       path={ ROUTES.SIGN_UP }         component={ SignupPage } />
-            <Route       path={ ROUTES.SIGN_IN }         component={ SigninPage } />
-            <Route       path={ ROUTES.FORGOT_PASSWORD } component={ ForgotPasswordPage } />
-            <ProtectedRoute       path={ ROUTES.HOME }            component={ HomePage } />
-            {/* <Route       path={ ROUTES.ACCOUNT }         component={ AccountPage } /> */}
-            {/* <Route       path={ ROUTES.ADMIN }           component={ AdminPage } /> */}
+            <Route exact        path={ ROUTES.LANDING }         component={ LandingPage }                           />
+            <Route              path={ ROUTES.SIGN_UP }         component={ SignupPage }                            />
+            <Route              path={ ROUTES.SIGN_IN }         component={ SigninPage }                            />
+            <Route              path={ ROUTES.FORGOT_PASSWORD } component={ ForgotPasswordPage }                    />
+            <AuthenticatedRoute path={ ROUTES.HOME }            component={ HomePage }                              />
+            <AuthorizedRoute    path={ ROUTES.ADMIN }           component={ AdminPage }     roles={[ROLES.ADMIN]}   />
         </div>
     </Router>
 )
@@ -43,20 +44,25 @@ class App extends Component {
         super(props)
 
         console.log("App.constructor()")
-    }
-
-    componentDidMount() {
-        console.log("App.componentDidMount()")
 
         this.props.store.appLoading = true
+    }
 
-        Auth.currentAuthenticatedUser({ bypassCache: true })
-            .then((user) => {
-                this.props.store.user = user
-                console.log("User", user)
-            })
-            .catch((err) => console.log("Error", err))
-            .finally(() => this.props.store.appLoading = false)
+    async componentDidMount() {
+        console.log("App.componentDidMount()")
+
+        try {
+            let user = await Auth.currentAuthenticatedUser({ bypassCache: true })
+            this.props.store.user = user
+
+            console.log("User", user)
+        }
+        catch (err) {
+            console.log("Error", err)
+        }
+        finally {
+            this.props.store.appLoading = false
+        }
     }
 
     render() {
