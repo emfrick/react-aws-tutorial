@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { compose } from 'recompose'
 import { observer } from 'mobx-react'
 import { Auth } from 'aws-amplify'
-import { Form, Input, Button } from 'semantic-ui-react'
+import { Grid, Header, Form, Message, Button, Segment } from 'semantic-ui-react'
 
 import { SignupLink } from '../SignUp'
 import { PasswordForgotLink } from '../PasswordForgot'
@@ -11,12 +11,20 @@ import { withStore } from '../../store'
 import * as ROUTES from '../../constants/routes'
 
 const SigninPage = () => (
-    <div>
-        <h1>Sign In</h1>
-        <SigninForm />
-        <PasswordForgotLink />
-        <SignupLink />
-    </div>
+    <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+        <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as='h2' color='teal' textAlign='center'>
+                Sign-in
+            </Header>
+            <Segment>
+                <SigninForm />
+            </Segment>
+            <Message>
+                <SignupLink />
+            </Message>
+            <PasswordForgotLink />
+        </Grid.Column>
+    </Grid>
 )
 
 @observer
@@ -40,6 +48,8 @@ class SigninFormBase extends Component {
             this.props.store.user = user
             this.props.store.reset(this.props.store.signin)
             this.props.history.push(ROUTES.HOME)
+
+            this.props.store.error = null
         }
         catch (err) {
             this.props.store.error = err
@@ -51,24 +61,19 @@ class SigninFormBase extends Component {
     }
 
     render() {
-        const { email, password, error } = this.props.store.signin
+        const { email, password } = this.props.store.signin
+        const { error } = this.props.store
 
         const isInvalid = password === '' || email === ''
 
         return (
-            <Form onSubmit={this.onSubmit}>
-                <Form.Field>
-                    <label>Email</label>
-                    <Input name="email" value={email} onChange={this.onChange} type="text" placeholder="Email Address" />
-                </Form.Field>
-                <Form.Field>
-                    <label>Password</label>
-                    <Input name="password" value={password} onChange={this.onChange} type="password" placeholder="Password" />
-                </Form.Field>
+            <Form size='large' onSubmit={this.onSubmit}>
+                <Form.Input fluid name="email" value={email} onChange={this.onChange} type="text" placeholder="Email Address" />
+                <Form.Input fluid name="password" value={password} onChange={this.onChange} type="password" placeholder="Password" />
 
-                <Button primary disabled={isInvalid} type="submit">Sign In</Button>
+                <Button fluid disabled={isInvalid} type="submit">Sign In</Button>
 
-                { error && <p>{error.message}</p> }
+                { error && <Message negative>{error.message}</Message> }
             </Form>
         )
     }
