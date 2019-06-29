@@ -26,8 +26,6 @@ const AppBase = (props) => (
         <div>
             <Navigation />
 
-            <hr />
-
             <Route exact        path={ ROUTES.LANDING }         component={ LandingPage }                           />
             <Route              path={ ROUTES.SIGN_UP }         component={ SignupPage }                            />
             <Route              path={ ROUTES.SIGN_IN }         component={ SigninPage }                            />

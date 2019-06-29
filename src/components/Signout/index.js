@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
 import { observer } from 'mobx-react'
 import { compose } from 'recompose'
+import { Button } from 'semantic-ui-react'
 
 import * as ROUTES from '../../constants/routes'
 import { withStore } from '../../store'
@@ -29,7 +30,7 @@ class SignoutButton extends Component {
 
     render() {
         return (
-            <button type="button" onClick={this.onSignout}>Sign Out</button>
+            <Button onClick={this.onSignout}>Sign Out</Button>
         )
     }
 }
