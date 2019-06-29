@@ -3,17 +3,26 @@ import { Link, withRouter } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
 import { observer } from 'mobx-react'
 import { compose } from 'recompose'
+import { Grid, Header, Form, Message, Button, Segment } from 'semantic-ui-react'
 
 import * as ROUTES from '../../constants/routes'
 import { withStore } from '../../store'
 import { SigninLink } from '../Signin';
 
 const SignupPage = observer((props) => (
-    <div>
-        <h1>Sign Up</h1>
-        { props.store.signup.verificationStep ? <VerificationForm {...props} /> : <SignupForm {...props} /> }
-        <SigninLink />
-    </div>
+    <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+        <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as='h2' color='teal' textAlign='center'>
+                Sign Up
+            </Header>
+            <Segment>
+                { props.store.signup.verificationStep ? <VerificationForm {...props} /> : <SignupForm {...props} /> }
+            </Segment>
+            <Message>
+                <SigninLink />
+            </Message>
+        </Grid.Column>
+    </Grid>
 ))
 
 @observer
@@ -23,6 +32,8 @@ class SignupFormBase extends Component {
 
         this.onSubmit = this.onSubmit.bind(this)
         this.onChange = this.onChange.bind(this)
+
+        this.props.store.error = null
     }
 
     async onSubmit(evt) {
@@ -40,9 +51,10 @@ class SignupFormBase extends Component {
             })
             
             this.props.store.signup.verificationStep = true
+            this.props.store.error = null
         }
         catch (err) {
-            console.log(err)
+            this.props.store.error = err
         }
     }
 
@@ -52,17 +64,20 @@ class SignupFormBase extends Component {
 
     render() {
         const { email, password, passwordConfirmation } = this.props.store.signup
+        const { error } = this.props.store
 
         const isInvalid = password !== passwordConfirmation || password === '' || email === '' 
 
         return (
-            <form onSubmit={this.onSubmit}>
-                <input name="email"    value={email}    onChange={this.onChange} type="text" placeholder="Email Address" />
-                <input name="password" value={password} onChange={this.onChange} type="password" placeholder="Password" />
-                <input name="passwordConfirmation" value={passwordConfirmation} onChange={this.onChange} type="password" placeholder="Confirm Password" />
+            <Form size='large' onSubmit={this.onSubmit}>
+                <Form.Input fluid name="email"    value={email}    onChange={this.onChange} type="text" placeholder="Email Address" />
+                <Form.Input fluid name="password" value={password} onChange={this.onChange} type="password" placeholder="Password" />
+                <Form.Input fluid name="passwordConfirmation" value={passwordConfirmation} onChange={this.onChange} type="password" placeholder="Confirm Password" />
 
-                <button type="submit" disabled={isInvalid}>Sign Up</button>
-            </form>
+                <Button fluid primary type="submit" disabled={isInvalid}>Sign Up</Button>
+
+                { error && <Message negative>{error.message}</Message> }
+            </Form>
         )
     }
 }
@@ -74,6 +89,8 @@ class VerificationForm extends Component {
 
         this.onSubmit = this.onSubmit.bind(this)
         this.onChange = this.onChange.bind(this)
+
+        this.props.store.error = null
     }
 
     async onSubmit(evt) {
@@ -89,9 +106,11 @@ class VerificationForm extends Component {
             this.props.store.user = user
             this.props.store.reset(this.props.store.signup)
             this.props.history.push(ROUTES.HOME)
+
+            this.props.store.error = null
         }
         catch (err) {
-            console.log(err)
+            this.props.store.error = err
         }
     }
 
@@ -101,13 +120,14 @@ class VerificationForm extends Component {
 
     render() {
         const { verificationCode } = this.props.store.signup
+        const { error } = this.props.store
         const isInvalid = verificationCode === ''
 
         return (
-            <form onSubmit={this.onSubmit}>
-                <input name="verificationCode" value={verificationCode} onChange={this.onChange} type="text" placeholder="Verification Code" />
-                <button type="submit" disabled={isInvalid}>Verify</button>
-            </form>
+            <Form fluid size='large' onSubmit={this.onSubmit}>
+                <Form.Input fluid name="verificationCode" value={verificationCode} onChange={this.onChange} type="text" placeholder="Verification Code" />
+                <Button fluid primary type="submit" disabled={isInvalid}>Verify</Button>
+            </Form>
         )
     }
 }

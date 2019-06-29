@@ -34,6 +34,8 @@ class SigninFormBase extends Component {
 
         this.onSubmit = this.onSubmit.bind(this)
         this.onChange = this.onChange.bind(this)
+
+        this.props.store.error = null
     }
 
     async onSubmit(evt) {
@@ -71,7 +73,7 @@ class SigninFormBase extends Component {
                 <Form.Input fluid name="email" value={email} onChange={this.onChange} type="text" placeholder="Email Address" />
                 <Form.Input fluid name="password" value={password} onChange={this.onChange} type="password" placeholder="Password" />
 
-                <Button fluid disabled={isInvalid} type="submit">Sign In</Button>
+                <Button fluid primary disabled={isInvalid} type="submit">Sign In</Button>
 
                 { error && <Message negative>{error.message}</Message> }
             </Form>
