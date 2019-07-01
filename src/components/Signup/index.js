@@ -78,7 +78,7 @@ class SignupFormBase extends Component {
                 <Form.Input fluid name="password" value={password} onChange={this.onChange} type="password" placeholder="Password" />
                 <Form.Input fluid name="passwordConfirmation" value={passwordConfirmation} onChange={this.onChange} type="password" placeholder="Confirm Password" />
 
-                <Button fluid primary type="submit" disabled={isInvalid} isLoading={isLoading}>Sign Up</Button>
+                <Button fluid primary type="submit" disabled={isInvalid} loading={isLoading}>Sign Up</Button>
 
                 { error && <Message negative>{error.message}</Message> }
             </Form>
