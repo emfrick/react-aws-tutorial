@@ -16,6 +16,7 @@ import SigninPage from '../Signin'
 import HomePage from '../Home'
 import ForgotPasswordPage from '../PasswordForgot'
 import AdminPage from '../Admin'
+import AccountPage from '../Account'
 
 const Loading = (props) => (
     <div>Loading...</div>
@@ -31,6 +32,7 @@ const AppBase = (props) => (
             <Route              path={ ROUTES.SIGN_IN }         component={ SigninPage }                            />
             <Route              path={ ROUTES.FORGOT_PASSWORD } component={ ForgotPasswordPage }                    />
             <AuthenticatedRoute path={ ROUTES.HOME }            component={ HomePage }                              />
+            <AuthenticatedRoute path={ ROUTES.ACCOUNT }         component={ AccountPage }                           />
             <AuthorizedRoute    path={ ROUTES.ADMIN }           component={ AdminPage }     roles={[ROLES.ADMIN]}   />
         </div>
     </Router>
