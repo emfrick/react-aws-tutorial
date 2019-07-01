@@ -19,6 +19,7 @@ Amplify.configure({
 
 class AppState {
     @observable appLoading = false
+    @observable isLoading = false
     @observable tagLine ='Hello from MobX'
     @observable user = null
     @observable verificationRequired = false

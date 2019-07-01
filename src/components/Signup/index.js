@@ -40,6 +40,7 @@ class SignupFormBase extends Component {
         const { email, password } = this.props.store.signup
 
         evt.preventDefault();
+        this.props.store.isLoading = true
 
         try {
             await Auth.signUp({
@@ -56,6 +57,9 @@ class SignupFormBase extends Component {
         catch (err) {
             this.props.store.error = err
         }
+        finally {
+            this.props.store.isLoading = false
+        }
     }
 
     onChange(evt) {
@@ -64,7 +68,7 @@ class SignupFormBase extends Component {
 
     render() {
         const { email, password, passwordConfirmation } = this.props.store.signup
-        const { error } = this.props.store
+        const { isLoading, error } = this.props.store
 
         const isInvalid = password !== passwordConfirmation || password === '' || email === '' 
 
@@ -74,7 +78,7 @@ class SignupFormBase extends Component {
                 <Form.Input fluid name="password" value={password} onChange={this.onChange} type="password" placeholder="Password" />
                 <Form.Input fluid name="passwordConfirmation" value={passwordConfirmation} onChange={this.onChange} type="password" placeholder="Confirm Password" />
 
-                <Button fluid primary type="submit" disabled={isInvalid}>Sign Up</Button>
+                <Button fluid primary type="submit" disabled={isInvalid} isLoading={isLoading}>Sign Up</Button>
 
                 { error && <Message negative>{error.message}</Message> }
             </Form>
