@@ -12,7 +12,7 @@ import { SigninLink } from '../Signin';
 const SignupPage = observer((props) => (
     <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as='h2' color='teal' textAlign='center'>
+            <Header as='h2' color='blue' textAlign='center'>
                 Sign Up
             </Header>
             <Segment>
