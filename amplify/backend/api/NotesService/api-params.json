@@ -1,0 +1,41 @@
+{
+    "paths": [
+        {
+            "name": "/notes",
+            "lambdaFunction": "NotesService",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        }
+    ],
+    "resourceName": "NotesService",
+    "apiName": "NotesService",
+    "functionArns": [
+        {
+            "lambdaFunction": "NotesService"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "react-aws-tutorial-dev-20190701155602-authRole",
+        "unAuthRoleName": "react-aws-tutorial-dev-20190701155602-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "NotesService",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

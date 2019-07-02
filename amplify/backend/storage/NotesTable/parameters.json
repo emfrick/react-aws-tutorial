@@ -1,0 +1,7 @@
+{
+    "tableName": "NotesTable",
+    "partitionKeyName": "userId",
+    "partitionKeyType": "S",
+    "sortKeyName": "noteId",
+    "sortKeyType": "S"
+}

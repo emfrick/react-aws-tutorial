@@ -1,0 +1,19 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "react-aws-tutorial-dev-20190701155602-authRole",
+            "UnauthRoleArn": "arn:aws:iam::966882276705:role/react-aws-tutorial-dev-20190701155602-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::966882276705:role/react-aws-tutorial-dev-20190701155602-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "react-aws-tutorial-dev-20190701155602-deployment",
+            "UnauthRoleName": "react-aws-tutorial-dev-20190701155602-unauthRole",
+            "StackName": "react-aws-tutorial-dev-20190701155602",
+            "StackId": "arn:aws:cloudformation:us-east-1:966882276705:stack/react-aws-tutorial-dev-20190701155602/41887950-9c3a-11e9-9520-1230783fe8ac"
+        },
+        "categories": {
+            "auth": {
+                "cognito280ab7fb": {}
+            }
+        }
+    }
+}
