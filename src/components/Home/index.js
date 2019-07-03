@@ -1,21 +1,24 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import uuid from 'uuid'
-import { Grid, Header, Form, Message, TextArea, Button } from 'semantic-ui-react'
+import { Container, Loader, Grid, Header, Form, Message, TextArea, Button, Card } from 'semantic-ui-react'
 
 import { withStore } from '../../store'
-import { API, Auth } from 'aws-amplify';
+import { API } from 'aws-amplify';
 
 const HomePage = observer((props) => (
+    <Container>
     <Grid textAlign='center' style={{ height: '100vh' }}>
-        <Grid.Column style={{ maxWidth: 450 }}>
+        <Grid.Column>
+            { props.store.home.loadingNotes ? <Loader active inline='centered' content='Loading Notes' /> : <NotesList {...props} /> }
             <Header as='h2' color='blue' textAlign='center'>
-                Post Note
+                New Note
             </Header>
             <HomePageForm {...props} />
             { props.store.error && <Message negative>{props.store.error.message}</Message>}
         </Grid.Column>
     </Grid>
+    </Container>
 ))
 
 @observer
@@ -32,34 +35,46 @@ class HomePageForm extends Component {
 
         let path = `/notes/${this.props.store.user.attributes.sub}`
        
-        try {
-            let notes = await API.get("NotesService", path)
+        this.props.store.home.loadingNotes = true
 
-            console.log(notes)
+        // Test more of a delay
+        setTimeout(async () => {
+            try {
+                let notes = await API.get("NotesService", path)
+    
+                console.log(notes)
+    
+                this.props.store.home.notes = notes
+            }
+            catch (err) {
+                console.log("Error getting notes", err)
+                this.props.store.error = err
+            }
+            finally {
+                this.props.store.home.loadingNotes = false
+            }
+        }, 3000);
 
-            this.props.store.home.notes = notes
-        }
-        catch (err) {
-            console.log("Error getting notes", err)
-            this.props.store.error = err
-        }
+        
     }
 
     onChange(evt) {
         evt.preventDefault()
 
-        this.props.store.home.note.content = evt.target.value
+        this.props.store.home.note[evt.target.name] = evt.target.value
     }
 
     async postNote(evt) {
         
         evt.preventDefault()
 
-        const { content } = this.props.store.home.note
+        const { note } = this.props.store.home
 
         let options = {
             body: {
-                content: content,
+                title: note.title,
+                content: note.content,
+                date: Date.now(),
                 userId: this.props.store.user.attributes.sub,
                 noteId: uuid.v1()
             }
@@ -73,6 +88,9 @@ class HomePageForm extends Component {
             console.log(response)
 
             this.props.store.home.notes.push(options.body)
+            console.log(this.props.store.home.notes)
+
+            this.props.store.reset(this.props.store.home.note)
         }
         catch (err) {
             console.log("Error creating note", err)
@@ -82,24 +100,39 @@ class HomePageForm extends Component {
     }
 
     render() {
-
-        let list = this.props.store.home.notes.map((note, idx) => {
-            return <li key={note.noteId}>{idx}: {note.content}</li>
-        })
+        let { note } = this.props.store.home
+        const isInvalid = note.title === '' || note.content === ''
 
         return (
-            <div>
-                <ul>
-                    {list}
-                </ul>
-                <Form onSubmit={this.postNote}>
-                    <TextArea rows={10} placeholder='Note Content' onChange={this.onChange} value={this.props.store.home.note.content} />
-                    <Button primary>Create Note</Button>
-                </Form>
-            </div>
+            <NewNoteForm onSubmit={this.postNote} onChange={this.onChange} model={note} isInvalid={isInvalid} />
         )
     }
 }
+
+const NewNoteForm = (props) => (
+    <Form onSubmit={props.onSubmit}>
+        <Form.Input name="title" value={props.model.title} onChange={props.onChange} placeholder='Title' />
+        <TextArea name="content" value={props.model.content} onChange={props.onChange} placeholder='Content' rows={10} />
+
+        <Button fluid primary type="submit" disabled={props.isInvalid}>Create Note</Button>
+    </Form>
+)
+
+const NotesList = observer((props) => (
+    <Card.Group>
+        { props.store.home.notes.map((note) => {
+            return (
+                <Card key={note.noteId}>
+                    <Card.Content>
+                        <Card.Header>{note.title}</Card.Header>
+                        <Card.Meta>{Date(note.date)}</Card.Meta>
+                        <Card.Description>{note.content}</Card.Description>
+                    </Card.Content>
+                </Card>
+            )
+        })}
+    </Card.Group>
+))
 
 
 export default withStore(HomePage)

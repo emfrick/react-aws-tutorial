@@ -52,8 +52,11 @@ class AppState {
         password: ''
     }
     @observable home = {
+        loadingNotes: false,
         note: {
-            content: ''
+            title: '',
+            content: '',
+            date: null
         },
         notes: []
     }
