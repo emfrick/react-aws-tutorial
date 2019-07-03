@@ -52,13 +52,7 @@ class AppState {
         password: ''
     }
     @observable home = {
-        loadingNotes: false,
-        note: {
-            title: '',
-            content: '',
-            date: null
-        },
-        notes: []
+        title: 'Home Page'
     }
 
     @action reset = (obj) => {
