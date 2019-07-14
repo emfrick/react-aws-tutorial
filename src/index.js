@@ -40,6 +40,10 @@ class AppState {
         password: ''
     }
 
+    @observable home = {
+        file: ''
+    }
+
     @action reset = (obj) => {
         Object.keys(obj).forEach((val) => {
             obj[val] = ''
